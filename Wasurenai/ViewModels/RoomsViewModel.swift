@@ -15,23 +15,31 @@ final class RoomsViewModel: ObservableObject {
     
     // MARK: - Published Properties
     
+    @Published var rooms: [Room] = []
     @Published var itemsByRoom: [(room: Room, items: [ReminderItem])] = []
+    @Published var unassignedItems: [ReminderItem] = []
     @Published var isLoading: Bool = false
     
     // MARK: - Dependencies
     
-    private let repository: ReminderItemRepository
+    private let itemRepository: ReminderItemRepository
+    private let roomRepository: RoomRepository
     
     // MARK: - Computed Properties
     
     var isEmpty: Bool {
-        itemsByRoom.isEmpty
+        itemsByRoom.isEmpty && unassignedItems.isEmpty
+    }
+    
+    var hasUnassignedItems: Bool {
+        !unassignedItems.isEmpty
     }
     
     // MARK: - Init
     
     init(context: NSManagedObjectContext) {
-        self.repository = ReminderItemRepository(context: context)
+        self.itemRepository = ReminderItemRepository(context: context)
+        self.roomRepository = RoomRepository(context: context)
         loadItems()
     }
     
@@ -40,12 +48,13 @@ final class RoomsViewModel: ObservableObject {
     func loadItems() {
         isLoading = true
         
-        let allItems = repository.fetchAll()
+        rooms = roomRepository.fetchAll()
+        let allItems = itemRepository.fetchAll()
         var grouped: [(room: Room, items: [ReminderItem])] = []
         
-        // 定義済みの部屋ごとにグループ化
-        for room in RoomConstants.rooms {
-            let roomItems = allItems.filter { $0.roomName == room.name }
+        // 部屋ごとにグループ化
+        for room in rooms {
+            let roomItems = allItems.filter { $0.room?.objectID == room.objectID }
                 .sorted { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) }
             
             if !roomItems.isEmpty {
@@ -54,27 +63,20 @@ final class RoomsViewModel: ObservableObject {
         }
         
         // 部屋未設定のアイテム
-        let unassignedItems = allItems.filter { item in
-            guard let roomName = item.roomName, !roomName.isEmpty else { return true }
-            return !RoomConstants.rooms.contains { $0.name == roomName }
-        }.sorted { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) }
-        
-        if !unassignedItems.isEmpty {
-            let otherRoom = Room(name: "未設定", iconName: "questionmark.circle.fill")
-            grouped.append((room: otherRoom, items: unassignedItems))
-        }
+        unassignedItems = allItems.filter { $0.room == nil }
+            .sorted { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) }
         
         self.itemsByRoom = grouped
         isLoading = false
     }
     
     func completeItem(_ item: ReminderItem) {
-        repository.complete(item: item)
+        itemRepository.complete(item: item)
         loadItems()
     }
     
     func deleteItem(_ item: ReminderItem) {
-        repository.delete(item: item)
+        itemRepository.delete(item: item)
         loadItems()
     }
     

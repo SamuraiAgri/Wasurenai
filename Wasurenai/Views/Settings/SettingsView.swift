@@ -20,8 +20,8 @@ struct SettingsView: View {
                 // データ管理セクション
                 dataSection
                 
-                // カテゴリ管理セクション
-                categorySection
+                // 部屋管理セクション
+                roomSection
                 
                 // 通知設定セクション
                 notificationSection
@@ -58,15 +58,15 @@ struct SettingsView: View {
         }
     }
     
-    private var categorySection: some View {
+    private var roomSection: some View {
         Section {
             NavigationLink {
-                CategoryListView()
+                RoomManagementView()
                     .environment(\.managedObjectContext, viewContext)
             } label: {
                 HStack {
-                    settingsIcon(AppIcons.tabItemsOutline, color: AppColors.secondary)
-                    Text(AppStrings.settingsCategoryManagement)
+                    settingsIcon("house.fill", color: AppColors.secondary)
+                    Text("部屋の管理")
                 }
             }
         }

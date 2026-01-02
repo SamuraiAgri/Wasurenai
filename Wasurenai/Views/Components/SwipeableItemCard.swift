@@ -119,25 +119,15 @@ struct SwipeableItemCard: View {
                     .lineLimit(1)
                 
                 HStack(spacing: 8) {
-                    if let category = item.category {
+                    if let room = item.room {
                         HStack(spacing: 4) {
                             Circle()
-                                .fill(Color(hex: category.colorHex ?? AppColors.categoryColors[0]))
+                                .fill(Color(hex: room.colorHex ?? AppColors.categoryColors[0]))
                                 .frame(width: 8, height: 8)
-                            Text(category.name ?? "")
+                            Text(room.name ?? "")
                                 .font(AppFonts.caption)
                                 .foregroundColor(AppColors.textSecondary)
                         }
-                    }
-                    
-                    if let room = item.roomName, !room.isEmpty {
-                        HStack(spacing: 2) {
-                            Image(systemName: "location.fill")
-                                .font(.system(size: 10))
-                            Text(room)
-                                .font(AppFonts.caption)
-                        }
-                        .foregroundColor(AppColors.textSecondary)
                     }
                 }
             }

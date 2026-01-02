@@ -130,8 +130,8 @@ struct ItemsView: View {
     
     private var mainContent: some View {
         VStack(spacing: 0) {
-            // カテゴリフィルター
-            categoryFilterBar
+            // 部屋フィルター
+            roomFilterBar
             
             // アイテムリスト
             if viewModel.isFilteredEmpty {
@@ -146,23 +146,23 @@ struct ItemsView: View {
         }
     }
     
-    private var categoryFilterBar: some View {
+    private var roomFilterBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: AppConstants.paddingSmall) {
                 AllCategoryChip(
-                    isSelected: viewModel.selectedCategory == nil
+                    isSelected: viewModel.selectedRoom == nil
                 ) {
-                    viewModel.selectAllCategories()
+                    viewModel.selectAllRooms()
                 }
                 
-                ForEach(viewModel.categories, id: \.objectID) { category in
+                ForEach(viewModel.rooms, id: \.objectID) { room in
                     CategoryChip(
-                        title: category.name ?? "",
-                        colorHex: category.colorHex,
-                        iconName: category.iconName,
-                        isSelected: viewModel.selectedCategory == category
+                        title: room.name ?? "",
+                        colorHex: room.colorHex,
+                        iconName: room.iconName,
+                        isSelected: viewModel.selectedRoom?.objectID == room.objectID
                     ) {
-                        viewModel.selectCategory(category)
+                        viewModel.selectRoom(room)
                     }
                 }
             }

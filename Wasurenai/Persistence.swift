@@ -56,11 +56,11 @@ struct PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         
-        // 初期カテゴリを作成
+        // 初期部屋を作成
         let context = container.viewContext
         Task { @MainActor in
-            let categoryRepository = CategoryRepository(context: context)
-            categoryRepository.createDefaultCategoriesIfNeeded()
+            let roomRepository = RoomRepository(context: context)
+            roomRepository.createDefaultRoomsIfNeeded()
         }
     }
     
@@ -68,46 +68,49 @@ struct PersistenceController {
     
     @MainActor
     private static func createSampleData(in context: NSManagedObjectContext) {
-        // サンプルカテゴリを作成
-        let toiletCategory = Category(context: context)
-        toiletCategory.id = UUID()
-        toiletCategory.name = "トイレ"
-        toiletCategory.colorHex = AppColors.categoryColors[0]
-        toiletCategory.iconName = "drop.fill"
-        toiletCategory.sortOrder = 0
-        toiletCategory.createdAt = Date()
+        // サンプル部屋を作成
+        let toiletRoom = Room(context: context)
+        toiletRoom.id = UUID()
+        toiletRoom.name = "トイレ"
+        toiletRoom.colorHex = AppColors.categoryColors[0]
+        toiletRoom.iconName = "toilet.fill"
+        toiletRoom.sortOrder = 0
+        toiletRoom.isDefault = true
+        toiletRoom.createdAt = Date()
         
-        let bathroomCategory = Category(context: context)
-        bathroomCategory.id = UUID()
-        bathroomCategory.name = "バスルーム"
-        bathroomCategory.colorHex = AppColors.categoryColors[1]
-        bathroomCategory.iconName = "bubbles.and.sparkles.fill"
-        bathroomCategory.sortOrder = 1
-        bathroomCategory.createdAt = Date()
+        let bathroomRoom = Room(context: context)
+        bathroomRoom.id = UUID()
+        bathroomRoom.name = "浴室"
+        bathroomRoom.colorHex = AppColors.categoryColors[1]
+        bathroomRoom.iconName = "bathtub.fill"
+        bathroomRoom.sortOrder = 1
+        bathroomRoom.isDefault = true
+        bathroomRoom.createdAt = Date()
         
-        let healthCategory = Category(context: context)
-        healthCategory.id = UUID()
-        healthCategory.name = "健康・衛生"
-        healthCategory.colorHex = AppColors.categoryColors[5]
-        healthCategory.iconName = "cross.case.fill"
-        healthCategory.sortOrder = 2
-        healthCategory.createdAt = Date()
+        let washroomRoom = Room(context: context)
+        washroomRoom.id = UUID()
+        washroomRoom.name = "洗面所"
+        washroomRoom.colorHex = AppColors.categoryColors[4]
+        washroomRoom.iconName = "sink.fill"
+        washroomRoom.sortOrder = 2
+        washroomRoom.isDefault = true
+        washroomRoom.createdAt = Date()
         
         // サンプルアイテムを作成
-        let items: [(name: String, category: Category, cycleDays: Int16, daysOffset: Int, icon: String)] = [
-            ("ブルーレット置くだけ", toiletCategory, 30, -2, "drop.fill"),
-            ("トイレスタンプ", toiletCategory, 14, 0, "sparkles"),
-            ("カビキラー", bathroomCategory, 90, 5, "flame.fill"),
-            ("お風呂の消臭力", bathroomCategory, 60, 10, "leaf.fill"),
-            ("歯ブラシ", healthCategory, 30, 3, "cross.case.fill"),
-            ("コンタクトレンズ", healthCategory, 14, 1, "eye"),
+        let items: [(name: String, room: Room, cycleDays: Int16, daysOffset: Int, icon: String)] = [
+            ("ブルーレット置くだけ", toiletRoom, 30, -2, "drop.fill"),
+            ("トイレスタンプ", toiletRoom, 14, 0, "sparkles"),
+            ("カビキラー", bathroomRoom, 90, 5, "flame.fill"),
+            ("お風呂の消臭力", bathroomRoom, 60, 10, "leaf.fill"),
+            ("歯ブラシ", washroomRoom, 30, 3, "cross.case.fill"),
+            ("コンタクトレンズ", washroomRoom, 14, 1, "eye"),
         ]
         
         for item in items {
             let reminderItem = ReminderItem(context: context)
             reminderItem.id = UUID()
             reminderItem.name = item.name
-            reminderItem.category = item.category
+            reminderItem.room = item.room
             reminderItem.cycleDays = item.cycleDays
             reminderItem.dueDate = Date().adding(days: item.daysOffset)
             reminderItem.iconName = item.icon

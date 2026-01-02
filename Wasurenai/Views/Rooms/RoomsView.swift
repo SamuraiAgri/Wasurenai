@@ -75,8 +75,13 @@ struct RoomsView: View {
     private var mainContent: some View {
         ScrollView {
             LazyVStack(spacing: AppConstants.paddingLarge) {
-                ForEach(viewModel.itemsByRoom, id: \.room.id) { roomData in
+                ForEach(viewModel.itemsByRoom, id: \.room.objectID) { roomData in
                     roomSection(room: roomData.room, items: roomData.items)
+                }
+                
+                // 未設定のアイテム
+                if viewModel.hasUnassignedItems {
+                    unassignedSection
                 }
             }
             .padding(.vertical, AppConstants.paddingMedium)
@@ -89,15 +94,15 @@ struct RoomsView: View {
             HStack(spacing: AppConstants.paddingSmall) {
                 ZStack {
                     Circle()
-                        .fill(AppColors.primary.opacity(0.15))
+                        .fill(Color(hex: room.colorHex ?? AppColors.categoryColors[0]).opacity(0.15))
                         .frame(width: 36, height: 36)
                     
-                    Image(systemName: room.iconName)
+                    Image(systemName: room.iconName ?? "house.fill")
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(AppColors.primary)
+                        .foregroundColor(Color(hex: room.colorHex ?? AppColors.categoryColors[0]))
                 }
                 
-                Text(room.name)
+                Text(room.name ?? "")
                     .font(AppFonts.headline)
                     .foregroundColor(AppColors.textPrimary)
                 
@@ -117,6 +122,59 @@ struct RoomsView: View {
             // アイテムリスト
             VStack(spacing: AppConstants.paddingSmall) {
                 ForEach(items, id: \.objectID) { item in
+                    SwipeableItemCard(
+                        item: item,
+                        dueStatus: viewModel.dueStatus(for: item),
+                        onComplete: {
+                            showingCompleteAlert = item
+                        },
+                        onEdit: {
+                            showingItemDetail = item
+                        },
+                        onDelete: {
+                            viewModel.deleteItem(item)
+                        }
+                    )
+                    .padding(.horizontal, AppConstants.paddingMedium)
+                }
+            }
+        }
+    }
+    
+    private var unassignedSection: some View {
+        VStack(spacing: 0) {
+            // ヘッダー
+            HStack(spacing: AppConstants.paddingSmall) {
+                ZStack {
+                    Circle()
+                        .fill(AppColors.textSecondary.opacity(0.15))
+                        .frame(width: 36, height: 36)
+                    
+                    Image(systemName: "questionmark.circle.fill")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(AppColors.textSecondary)
+                }
+                
+                Text("未設定")
+                    .font(AppFonts.headline)
+                    .foregroundColor(AppColors.textPrimary)
+                
+                Text("\(viewModel.unassignedItems.count)")
+                    .font(AppFonts.caption)
+                    .foregroundColor(AppColors.textSecondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(AppColors.secondaryBackground)
+                    .cornerRadius(8)
+                
+                Spacer()
+            }
+            .padding(.horizontal, AppConstants.paddingMedium)
+            .padding(.bottom, AppConstants.paddingSmall)
+            
+            // アイテムリスト
+            VStack(spacing: AppConstants.paddingSmall) {
+                ForEach(viewModel.unassignedItems, id: \.objectID) { item in
                     SwipeableItemCard(
                         item: item,
                         dueStatus: viewModel.dueStatus(for: item),

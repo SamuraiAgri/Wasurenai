@@ -16,15 +16,15 @@ final class ItemsViewModel: ObservableObject {
     // MARK: - Published Properties
     
     @Published var items: [ReminderItem] = []
-    @Published var categories: [Category] = []
-    @Published var selectedCategory: Category? = nil
+    @Published var rooms: [Room] = []
+    @Published var selectedRoom: Room? = nil
     @Published var searchText: String = ""
     @Published var isLoading: Bool = false
     
     // MARK: - Dependencies
     
     private let itemRepository: ReminderItemRepository
-    private let categoryRepository: CategoryRepository
+    private let roomRepository: RoomRepository
     
     // MARK: - Computed Properties
     
@@ -32,9 +32,9 @@ final class ItemsViewModel: ObservableObject {
     var filteredItems: [ReminderItem] {
         var result = items
         
-        // カテゴリフィルタ
-        if let category = selectedCategory {
-            result = result.filter { $0.category?.objectID == category.objectID }
+        // 部屋フィルタ
+        if let room = selectedRoom {
+            result = result.filter { $0.room?.objectID == room.objectID }
         }
         
         // 検索フィルタ
@@ -61,7 +61,7 @@ final class ItemsViewModel: ObservableObject {
     
     init(context: NSManagedObjectContext) {
         self.itemRepository = ReminderItemRepository(context: context)
-        self.categoryRepository = CategoryRepository(context: context)
+        self.roomRepository = RoomRepository(context: context)
         loadData()
     }
     
@@ -71,18 +71,18 @@ final class ItemsViewModel: ObservableObject {
     func loadData() {
         isLoading = true
         items = itemRepository.fetchAll()
-        categories = categoryRepository.fetchAll()
+        rooms = roomRepository.fetchAll()
         isLoading = false
     }
     
-    /// カテゴリを選択
-    func selectCategory(_ category: Category?) {
-        selectedCategory = category
+    /// 部屋を選択
+    func selectRoom(_ room: Room?) {
+        selectedRoom = room
     }
     
-    /// すべてのカテゴリを表示
-    func selectAllCategories() {
-        selectedCategory = nil
+    /// すべての部屋を表示
+    func selectAllRooms() {
+        selectedRoom = nil
     }
     
     /// アイテムを削除

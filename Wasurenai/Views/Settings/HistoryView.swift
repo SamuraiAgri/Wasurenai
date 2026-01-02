@@ -153,12 +153,12 @@ struct HistoryView: View {
                     .font(AppFonts.body)
                     .foregroundColor(AppColors.textPrimary)
                 
-                if let category = history.item?.category {
+                if let room = history.item?.room {
                     HStack(spacing: 4) {
                         Circle()
-                            .fill(Color(hex: category.colorHex ?? AppColors.categoryColors[0]))
+                            .fill(Color(hex: room.colorHex ?? AppColors.categoryColors[0]))
                             .frame(width: 8, height: 8)
-                        Text(category.name ?? "")
+                        Text(room.name ?? "")
                             .font(AppFonts.caption)
                             .foregroundColor(AppColors.textSecondary)
                     }

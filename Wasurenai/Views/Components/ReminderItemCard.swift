@@ -31,13 +31,13 @@ struct ReminderItemCard: View {
                         .foregroundColor(AppColors.textPrimary)
                         .lineLimit(1)
                     
-                    // カテゴリ
-                    if let category = item.category {
+                    // 部屋
+                    if let room = item.room {
                         HStack(spacing: 4) {
                             Circle()
-                                .fill(Color(hex: category.colorHex ?? AppColors.categoryColors[0]))
+                                .fill(Color(hex: room.colorHex ?? AppColors.categoryColors[0]))
                                 .frame(width: 8, height: 8)
-                            Text(category.name ?? "")
+                            Text(room.name ?? "")
                                 .font(AppFonts.caption)
                                 .foregroundColor(AppColors.textSecondary)
                         }

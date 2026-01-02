@@ -84,9 +84,9 @@ struct HomeView: View {
                     urgentSection
                 }
                 
-                // カテゴリ別セクション
-                if !viewModel.itemsByCategory.isEmpty {
-                    categorySection
+                // 部屋別セクション
+                if !viewModel.itemsByRoom.isEmpty {
+                    roomSection
                 }
             }
             .padding(.bottom, AppConstants.paddingLarge)
@@ -125,13 +125,13 @@ struct HomeView: View {
         }
     }
     
-    // MARK: - Category Section
+    // MARK: - Room Section
     
-    private var categorySection: some View {
+    private var roomSection: some View {
         VStack(spacing: AppConstants.paddingMedium) {
             // セクションヘッダー
             HStack {
-                Text(AppStrings.homeSectionByCategory)
+                Text(AppStrings.homeSectionByRoom)
                     .font(AppFonts.subheadlineBold)
                     .foregroundColor(AppColors.textSecondary)
                 Spacer()
@@ -139,12 +139,12 @@ struct HomeView: View {
             .padding(.horizontal, AppConstants.paddingMedium)
             .padding(.top, AppConstants.paddingSmall)
             
-            // カテゴリ別カード
-            ForEach(viewModel.itemsByCategory.indices, id: \.self) { index in
-                let categoryData = viewModel.itemsByCategory[index]
-                CategoryItemsCard(
-                    category: categoryData.category,
-                    items: categoryData.items,
+            // 部屋別カード
+            ForEach(viewModel.itemsByRoom.indices, id: \.self) { index in
+                let roomData = viewModel.itemsByRoom[index]
+                RoomItemsCard(
+                    room: roomData.room,
+                    items: roomData.items,
                     onItemTap: { item in
                         showingItemDetail = item
                     },
@@ -160,11 +160,11 @@ struct HomeView: View {
     }
 }
 
-// MARK: - Category Items Card
+// MARK: - Room Items Card
 
-struct CategoryItemsCard: View {
+struct RoomItemsCard: View {
     
-    let category: Category?
+    let room: Room?
     let items: [ReminderItem]
     let onItemTap: (ReminderItem) -> Void
     let onComplete: (ReminderItem) -> Void
@@ -172,42 +172,42 @@ struct CategoryItemsCard: View {
     
     @State private var isExpanded: Bool = true
     
-    private var categoryColor: Color {
-        if let hex = category?.colorHex {
+    private var roomColor: Color {
+        if let hex = room?.colorHex {
             return Color(hex: hex)
         }
         return AppColors.textSecondary
     }
     
-    private var categoryName: String {
-        category?.name ?? AppStrings.categoryNone
+    private var roomName: String {
+        room?.name ?? "未設定"
     }
     
-    private var categoryIcon: String {
-        category?.iconName ?? "folder.fill"
+    private var roomIcon: String {
+        room?.iconName ?? "questionmark.circle.fill"
     }
     
     var body: some View {
         VStack(spacing: 0) {
-            // カテゴリヘッダー
+            // 部屋ヘッダー
             Button {
                 withAnimation(AppConstants.springAnimation) {
                     isExpanded.toggle()
                 }
             } label: {
                 HStack(spacing: AppConstants.paddingSmall) {
-                    // カテゴリアイコン
+                    // 部屋アイコン
                     ZStack {
                         Circle()
-                            .fill(categoryColor.opacity(0.15))
+                            .fill(roomColor.opacity(0.15))
                             .frame(width: 36, height: 36)
                         
-                        Image(systemName: categoryIcon)
+                        Image(systemName: roomIcon)
                             .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(categoryColor)
+                            .foregroundColor(roomColor)
                     }
                     
-                    Text(categoryName)
+                    Text(roomName)
                         .font(AppFonts.bodyBold)
                         .foregroundColor(AppColors.textPrimary)
                     
@@ -236,7 +236,7 @@ struct CategoryItemsCard: View {
                 
                 VStack(spacing: 0) {
                     ForEach(items, id: \.objectID) { item in
-                        CategoryItemRow(
+                        RoomItemRow(
                             item: item,
                             dueStatus: dueStatusProvider(item),
                             onTap: { onItemTap(item) },
@@ -263,9 +263,9 @@ struct CategoryItemsCard: View {
     }
 }
 
-// MARK: - Category Item Row
+// MARK: - Room Item Row
 
-struct CategoryItemRow: View {
+struct RoomItemRow: View {
     
     let item: ReminderItem
     let dueStatus: DueStatus

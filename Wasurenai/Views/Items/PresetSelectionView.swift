@@ -31,8 +31,8 @@ struct PresetSelectionView: View {
                         headerSection
                         
                         // カテゴリごとのプリセット
-                        ForEach(PresetItem.presets) { category in
-                            presetCategorySection(category)
+                        ForEach(PresetItem.presets) { presetRoom in
+                            presetCategorySection(presetRoom)
                         }
                         
                         Spacer(minLength: 100)
@@ -77,11 +77,15 @@ struct PresetSelectionView: View {
         .padding(.vertical, AppConstants.paddingMedium)
     }
     
-    private func presetCategorySection(_ category: PresetCategory) -> some View {
+    private func presetCategorySection(_ presetRoom: PresetRoom) -> some View {
         VStack(alignment: .leading, spacing: AppConstants.paddingSmall) {
-            // カテゴリヘッダー
+            // 部屋ヘッダー
             HStack {
-                Text(category.name)
+                Image(systemName: presetRoom.iconName)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(AppColors.textSecondary)
+                
+                Text(presetRoom.name)
                     .font(AppFonts.subheadlineBold)
                     .foregroundColor(AppColors.textSecondary)
                 
@@ -89,9 +93,9 @@ struct PresetSelectionView: View {
                 
                 // 全選択/全解除ボタン
                 Button {
-                    toggleAllInCategory(category)
+                    toggleAllInRoom(presetRoom)
                 } label: {
-                    Text(allSelectedInCategory(category) ? "全解除" : "全選択")
+                    Text(allSelectedInRoom(presetRoom) ? "全解除" : "全選択")
                         .font(AppFonts.caption)
                         .foregroundColor(AppColors.primary)
                 }
@@ -100,10 +104,10 @@ struct PresetSelectionView: View {
             
             // アイテムカード
             VStack(spacing: 0) {
-                ForEach(category.items) { item in
+                ForEach(presetRoom.items) { item in
                     presetItemRow(item)
                     
-                    if item != category.items.last {
+                    if item != presetRoom.items.last {
                         Divider()
                             .padding(.leading, 56)
                     }
@@ -216,37 +220,36 @@ struct PresetSelectionView: View {
         }
     }
     
-    private func allSelectedInCategory(_ category: PresetCategory) -> Bool {
-        category.items.allSatisfy { selectedPresets.contains($0) }
+    private func allSelectedInRoom(_ presetRoom: PresetRoom) -> Bool {
+        presetRoom.items.allSatisfy { selectedPresets.contains($0) }
     }
     
-    private func toggleAllInCategory(_ category: PresetCategory) {
-        if allSelectedInCategory(category) {
-            category.items.forEach { selectedPresets.remove($0) }
+    private func toggleAllInRoom(_ presetRoom: PresetRoom) {
+        if allSelectedInRoom(presetRoom) {
+            presetRoom.items.forEach { selectedPresets.remove($0) }
         } else {
-            category.items.forEach { selectedPresets.insert($0) }
+            presetRoom.items.forEach { selectedPresets.insert($0) }
         }
         hapticFeedback.impactOccurred()
     }
     
     private func addSelectedItems() {
         let repository = ReminderItemRepository(context: viewContext)
-        let categoryRepository = CategoryRepository(context: viewContext)
-        let categories = categoryRepository.fetchAll()
+        let roomRepository = RoomRepository(context: viewContext)
+        let rooms = roomRepository.fetchAll()
         
         for preset in selectedPresets {
-            // カテゴリを検索（なければ作成）
-            let category = categories.first { $0.name == preset.categoryName }
+            // 部屋を検索
+            let room = rooms.first { $0.name == preset.roomName }
             
             repository.create(
                 name: preset.name,
-                category: category,
+                room: room,
                 cycleDays: Int16(preset.cycleDays),
                 dueDate: Date().adding(days: preset.cycleDays),
                 iconName: preset.iconName,
                 memo: nil,
-                notifyBefore: 1,
-                roomName: preset.roomName
+                notifyBefore: 1
             )
         }
         

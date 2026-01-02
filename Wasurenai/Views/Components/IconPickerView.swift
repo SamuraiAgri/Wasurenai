@@ -7,6 +7,38 @@
 
 import SwiftUI
 
+/// アイコン選択シート
+struct IconPickerSheet: View {
+    
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedIconName: String
+    let selectedColor: Color
+    let icons: [String]
+    
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                IconPickerView(
+                    selectedIconName: $selectedIconName,
+                    icons: icons,
+                    accentColor: selectedColor
+                )
+                .padding(AppConstants.paddingMedium)
+            }
+            .navigationTitle("アイコンを選択")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("完了") {
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                }
+            }
+        }
+    }
+}
+
 /// アイコン選択ビュー
 struct IconPickerView: View {
     

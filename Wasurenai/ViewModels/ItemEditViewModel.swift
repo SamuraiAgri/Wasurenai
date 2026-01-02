@@ -16,7 +16,6 @@ final class ItemEditViewModel: ObservableObject {
     // MARK: - Published Properties
     
     @Published var name: String = ""
-    @Published var selectedCategory: Category? = nil
     @Published var selectedRoom: Room? = nil
     @Published var cycleDays: Int = Int(AppConstants.defaultCycleDays)
     @Published var dueDate: Date = Date()
@@ -25,14 +24,14 @@ final class ItemEditViewModel: ObservableObject {
     @Published var notifyBefore: Int = Int(AppConstants.defaultNotifyBefore)
     @Published var notifyEnabled: Bool = true
     
-    @Published var categories: [Category] = []
+    @Published var rooms: [Room] = []
     @Published var isSaving: Bool = false
     @Published var errorMessage: String? = nil
     
     // MARK: - Properties
     
     private let repository: ReminderItemRepository
-    private let categoryRepository: CategoryRepository
+    private let roomRepository: RoomRepository
     private let editingItem: ReminderItem?
     
     /// 編集モードかどうか
@@ -55,46 +54,69 @@ final class ItemEditViewModel: ObservableObject {
     /// 新規作成用
     init(context: NSManagedObjectContext) {
         self.repository = ReminderItemRepository(context: context)
-        self.categoryRepository = CategoryRepository(context: context)
+        self.roomRepository = RoomRepository(context: context)
         self.editingItem = nil
         
-        loadCategories()
+        loadRooms()
         setupDefaults()
     }
     
     /// 編集用
     init(context: NSManagedObjectContext, item: ReminderItem) {
         self.repository = ReminderItemRepository(context: context)
-        self.categoryRepository = CategoryRepository(context: context)
+        self.roomRepository = RoomRepository(context: context)
         self.editingItem = item
         
-        loadCategories()
+        loadRooms()
         loadItemData(item)
+    }
+    
+    /// プリセットから作成
+    init(context: NSManagedObjectContext, preset: PresetItem) {
+        self.repository = ReminderItemRepository(context: context)
+        self.roomRepository = RoomRepository(context: context)
+        self.editingItem = nil
+        
+        loadRooms()
+        loadPresetData(preset)
     }
     
     // MARK: - Private Methods
     
-    private func loadCategories() {
-        categories = categoryRepository.fetchAll()
+    private func loadRooms() {
+        rooms = roomRepository.fetchAll()
     }
     
     private func setupDefaults() {
         dueDate = Date().adding(days: cycleDays)
-        if let firstCategory = categories.first {
-            selectedCategory = firstCategory
+        if let firstRoom = rooms.first {
+            selectedRoom = firstRoom
         }
     }
     
     private func loadItemData(_ item: ReminderItem) {
         name = item.name ?? ""
-        selectedCategory = item.category
-        selectedRoom = RoomConstants.room(for: item.roomName)
+        selectedRoom = item.room
         cycleDays = Int(item.cycleDays)
         dueDate = item.dueDate ?? Date()
         selectedIconName = item.iconName ?? AppIcons.itemIcons[0]
         memo = item.memo ?? ""
         notifyBefore = Int(item.notifyBefore)
         notifyEnabled = item.notifyBefore > 0
+    }
+    
+    private func loadPresetData(_ preset: PresetItem) {
+        name = preset.name
+        selectedIconName = preset.iconName
+        cycleDays = preset.cycleDays
+        dueDate = Date().adding(days: cycleDays)
+        
+        // 部屋名で検索してセット
+        if let room = roomRepository.findByName(preset.roomName) {
+            selectedRoom = room
+        } else if let firstRoom = rooms.first {
+            selectedRoom = firstRoom
+        }
     }
     
     // MARK: - Public Methods
@@ -119,24 +141,22 @@ final class ItemEditViewModel: ObservableObject {
             repository.update(
                 item: item,
                 name: trimmedName,
-                category: selectedCategory,
+                room: selectedRoom,
                 cycleDays: Int16(cycleDays),
                 dueDate: dueDate,
                 iconName: selectedIconName,
                 memo: trimmedMemo.isEmpty ? nil : trimmedMemo,
-                notifyBefore: actualNotifyBefore,
-                roomName: selectedRoom?.name
+                notifyBefore: actualNotifyBefore
             )
         } else {
             repository.create(
                 name: trimmedName,
-                category: selectedCategory,
+                room: selectedRoom,
                 cycleDays: Int16(cycleDays),
                 dueDate: dueDate,
                 iconName: selectedIconName,
                 memo: trimmedMemo.isEmpty ? nil : trimmedMemo,
-                notifyBefore: actualNotifyBefore,
-                roomName: selectedRoom?.name
+                notifyBefore: actualNotifyBefore
             )
         }
         

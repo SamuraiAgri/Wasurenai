@@ -39,7 +39,7 @@ struct AppStrings {
     static let homeSectionToday = "今日"
     static let homeSectionThisWeek = "今週"
     static let homeSectionLater = "今後"
-    static let homeSectionByCategory = "カテゴリ別"
+    static let homeSectionByRoom = "部屋別"
     
     // MARK: - Items
     

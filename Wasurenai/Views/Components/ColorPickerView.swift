@@ -7,6 +7,35 @@
 
 import SwiftUI
 
+/// カラー選択シート
+struct ColorPickerView: View {
+    
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedColorHex: String
+    
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                ColorPickerGridView(
+                    selectedColorHex: $selectedColorHex,
+                    colors: AppColors.categoryColors
+                )
+                .padding(AppConstants.paddingMedium)
+            }
+            .navigationTitle("カラーを選択")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("完了") {
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                }
+            }
+        }
+    }
+}
+
 /// カラー選択ビュー
 struct ColorPickerGridView: View {
     
@@ -63,9 +92,7 @@ private struct ColorCell: View {
 }
 
 #Preview {
-    ColorPickerGridView(
-        selectedColorHex: .constant(AppColors.categoryColors[0]),
-        colors: AppColors.categoryColors
+    ColorPickerView(
+        selectedColorHex: .constant(AppColors.categoryColors[0])
     )
-    .padding()
 }

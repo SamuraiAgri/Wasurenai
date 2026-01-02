@@ -32,19 +32,19 @@ final class ReminderItemRepository: ObservableObject {
         }
     }
     
-    /// カテゴリでフィルタしてアイテムを取得
-    func fetchByCategory(_ category: Category?) -> [ReminderItem] {
+    /// 部屋でフィルタしてアイテムを取得
+    func fetchByRoom(_ room: Room?) -> [ReminderItem] {
         let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ReminderItem.dueDate, ascending: true)]
         
-        if let category = category {
-            request.predicate = NSPredicate(format: "category == %@", category)
+        if let room = room {
+            request.predicate = NSPredicate(format: "room == %@", room)
         }
         
         do {
             return try viewContext.fetch(request)
         } catch {
-            print("Error fetching items by category: \(error)")
+            print("Error fetching items by room: \(error)")
             return []
         }
     }
@@ -88,24 +88,22 @@ final class ReminderItemRepository: ObservableObject {
     @discardableResult
     func create(
         name: String,
-        category: Category?,
+        room: Room?,
         cycleDays: Int16,
         dueDate: Date,
         iconName: String?,
         memo: String?,
-        notifyBefore: Int16,
-        roomName: String? = nil
+        notifyBefore: Int16
     ) -> ReminderItem {
         let item = ReminderItem(context: viewContext)
         item.id = UUID()
         item.name = name
-        item.category = category
+        item.room = room
         item.cycleDays = cycleDays
         item.dueDate = dueDate
         item.iconName = iconName
         item.memo = memo
         item.notifyBefore = notifyBefore
-        item.roomName = roomName
         item.isCompleted = false
         item.createdAt = Date()
         
@@ -119,22 +117,20 @@ final class ReminderItemRepository: ObservableObject {
     func update(
         item: ReminderItem,
         name: String,
-        category: Category?,
+        room: Room?,
         cycleDays: Int16,
         dueDate: Date,
         iconName: String?,
         memo: String?,
-        notifyBefore: Int16,
-        roomName: String? = nil
+        notifyBefore: Int16
     ) {
         item.name = name
-        item.category = category
+        item.room = room
         item.cycleDays = cycleDays
         item.dueDate = dueDate
         item.iconName = iconName
         item.memo = memo
         item.notifyBefore = notifyBefore
-        item.roomName = roomName
         
         save()
     }

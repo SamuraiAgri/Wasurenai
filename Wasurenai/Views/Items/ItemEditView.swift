@@ -104,28 +104,14 @@ struct ItemEditView: View {
                 }
             }
             
-            // カテゴリ選択
-            Picker(AppStrings.itemDetailCategory, selection: $viewModel.selectedCategory) {
-                Text(AppStrings.categoryNone)
-                    .tag(nil as Category?)
-                ForEach(viewModel.categories, id: \.objectID) { category in
-                    HStack {
-                        Image(systemName: category.iconName ?? AppIcons.categoryIcons[0])
-                        Text(category.name ?? "")
-                    }
-                    .tag(category as Category?)
-                }
-            }
-            .tint(AppColors.primary)
-            
             // 部屋選択
             Picker("場所", selection: $viewModel.selectedRoom) {
                 Text("未設定")
                     .tag(nil as Room?)
-                ForEach(RoomConstants.rooms) { room in
+                ForEach(viewModel.rooms, id: \.objectID) { room in
                     HStack {
-                        Image(systemName: room.iconName)
-                        Text(room.name)
+                        Image(systemName: room.iconName ?? "house.fill")
+                        Text(room.name ?? "")
                     }
                     .tag(room as Room?)
                 }

@@ -18,21 +18,21 @@ final class HomeViewModel: ObservableObject {
     /// 緊急アイテム（期限切れ + 今日 + 明日）
     @Published var urgentItems: [ReminderItem] = []
     
-    /// カテゴリ別アイテム（緊急以外）
-    @Published var itemsByCategory: [(category: Category?, items: [ReminderItem])] = []
+    /// 部屋別アイテム（緊急以外）
+    @Published var itemsByRoom: [(room: Room?, items: [ReminderItem])] = []
     
     @Published var isLoading: Bool = false
     
     // MARK: - Dependencies
     
     private let repository: ReminderItemRepository
-    private let categoryRepository: CategoryRepository
+    private let roomRepository: RoomRepository
     
     // MARK: - Computed Properties
     
     /// すべてのアイテムが空かどうか
     var isEmpty: Bool {
-        urgentItems.isEmpty && itemsByCategory.isEmpty
+        urgentItems.isEmpty && itemsByRoom.isEmpty
     }
     
     /// 緊急アイテム数（バッジ表示用）
@@ -49,7 +49,7 @@ final class HomeViewModel: ObservableObject {
     
     init(context: NSManagedObjectContext) {
         self.repository = ReminderItemRepository(context: context)
-        self.categoryRepository = CategoryRepository(context: context)
+        self.roomRepository = RoomRepository(context: context)
         loadItems()
     }
     
@@ -60,7 +60,7 @@ final class HomeViewModel: ObservableObject {
         isLoading = true
         
         let allItems = repository.fetchAll()
-        let categories = categoryRepository.fetchAll()
+        let rooms = roomRepository.fetchAll()
         
         // 緊急アイテム（期限切れ、今日、明日）を抽出
         var urgent: [ReminderItem] = []
@@ -86,25 +86,25 @@ final class HomeViewModel: ObservableObject {
             return ($0.dueDate ?? Date()) < ($1.dueDate ?? Date())
         }
         
-        // カテゴリ別にグループ化
-        var grouped: [(category: Category?, items: [ReminderItem])] = []
+        // 部屋別にグループ化
+        var grouped: [(room: Room?, items: [ReminderItem])] = []
         
-        for category in categories {
-            let categoryItems = nonUrgent.filter { $0.category?.objectID == category.objectID }
+        for room in rooms {
+            let roomItems = nonUrgent.filter { $0.room?.objectID == room.objectID }
                 .sorted { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) }
-            if !categoryItems.isEmpty {
-                grouped.append((category: category, items: categoryItems))
+            if !roomItems.isEmpty {
+                grouped.append((room: room, items: roomItems))
             }
         }
         
-        // カテゴリなしのアイテム
-        let uncategorizedItems = nonUrgent.filter { $0.category == nil }
+        // 部屋なしのアイテム
+        let unassignedItems = nonUrgent.filter { $0.room == nil }
             .sorted { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) }
-        if !uncategorizedItems.isEmpty {
-            grouped.append((category: nil, items: uncategorizedItems))
+        if !unassignedItems.isEmpty {
+            grouped.append((room: nil, items: unassignedItems))
         }
         
-        self.itemsByCategory = grouped
+        self.itemsByRoom = grouped
         
         isLoading = false
     }
