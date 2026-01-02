@@ -34,7 +34,7 @@ final class ItemsViewModel: ObservableObject {
         
         // カテゴリフィルタ
         if let category = selectedCategory {
-            result = result.filter { $0.category == category }
+            result = result.filter { $0.category?.objectID == category.objectID }
         }
         
         // 検索フィルタ

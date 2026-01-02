@@ -90,7 +90,7 @@ final class HomeViewModel: ObservableObject {
         var grouped: [(category: Category?, items: [ReminderItem])] = []
         
         for category in categories {
-            let categoryItems = nonUrgent.filter { $0.category == category }
+            let categoryItems = nonUrgent.filter { $0.category?.objectID == category.objectID }
                 .sorted { ($0.dueDate ?? Date()) < ($1.dueDate ?? Date()) }
             if !categoryItems.isEmpty {
                 grouped.append((category: category, items: categoryItems))

@@ -6,14 +6,65 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		21DFC6192F07D164009CD837 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21DFC6182F07D164009CD837 /* WidgetKit.framework */; };
+		21DFC61B2F07D164009CD837 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21DFC61A2F07D164009CD837 /* SwiftUI.framework */; };
+		21DFC62A2F07D166009CD837 /* WasurenaiWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 21DFC6162F07D164009CD837 /* WasurenaiWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		21DFC6282F07D166009CD837 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21DFC5992F07AA90009CD837 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 21DFC6152F07D164009CD837;
+			remoteInfo = WasurenaiWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		21DFC62F2F07D166009CD837 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				21DFC62A2F07D166009CD837 /* WasurenaiWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		21DFC5A12F07AA90009CD837 /* Wasurenai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wasurenai.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		21DFC6162F07D164009CD837 /* WasurenaiWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WasurenaiWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		21DFC6182F07D164009CD837 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		21DFC61A2F07D164009CD837 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		21DFC62B2F07D166009CD837 /* Exceptions for "WasurenaiWidget" folder in "WasurenaiWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 21DFC6152F07D164009CD837 /* WasurenaiWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		21DFC5A32F07AA90009CD837 /* Wasurenai */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Wasurenai;
+			sourceTree = "<group>";
+		};
+		21DFC61C2F07D164009CD837 /* WasurenaiWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				21DFC62B2F07D166009CD837 /* Exceptions for "WasurenaiWidget" folder in "WasurenaiWidgetExtension" target */,
+			);
+			path = WasurenaiWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,6 +77,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		21DFC6132F07D164009CD837 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21DFC61B2F07D164009CD837 /* SwiftUI.framework in Frameworks */,
+				21DFC6192F07D164009CD837 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -33,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				21DFC5A32F07AA90009CD837 /* Wasurenai */,
+				21DFC61C2F07D164009CD837 /* WasurenaiWidget */,
+				21DFC6172F07D164009CD837 /* Frameworks */,
 				21DFC5A22F07AA90009CD837 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,8 +103,18 @@
 			isa = PBXGroup;
 			children = (
 				21DFC5A12F07AA90009CD837 /* Wasurenai.app */,
+				21DFC6162F07D164009CD837 /* WasurenaiWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		21DFC6172F07D164009CD837 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				21DFC6182F07D164009CD837 /* WidgetKit.framework */,
+				21DFC61A2F07D164009CD837 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -55,10 +127,12 @@
 				21DFC59D2F07AA90009CD837 /* Sources */,
 				21DFC59E2F07AA90009CD837 /* Frameworks */,
 				21DFC59F2F07AA90009CD837 /* Resources */,
+				21DFC62F2F07D166009CD837 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				21DFC6292F07D166009CD837 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				21DFC5A32F07AA90009CD837 /* Wasurenai */,
@@ -69,6 +143,28 @@
 			productName = Wasurenai;
 			productReference = 21DFC5A12F07AA90009CD837 /* Wasurenai.app */;
 			productType = "com.apple.product-type.application";
+		};
+		21DFC6152F07D164009CD837 /* WasurenaiWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 21DFC62C2F07D166009CD837 /* Build configuration list for PBXNativeTarget "WasurenaiWidgetExtension" */;
+			buildPhases = (
+				21DFC6122F07D164009CD837 /* Sources */,
+				21DFC6132F07D164009CD837 /* Frameworks */,
+				21DFC6142F07D164009CD837 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				21DFC61C2F07D164009CD837 /* WasurenaiWidget */,
+			);
+			name = WasurenaiWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = WasurenaiWidgetExtension;
+			productReference = 21DFC6162F07D164009CD837 /* WasurenaiWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +177,9 @@
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					21DFC5A02F07AA90009CD837 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					21DFC6152F07D164009CD837 = {
 						CreatedOnToolsVersion = 16.2;
 					};
 				};
@@ -100,12 +199,20 @@
 			projectRoot = "";
 			targets = (
 				21DFC5A02F07AA90009CD837 /* Wasurenai */,
+				21DFC6152F07D164009CD837 /* WasurenaiWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		21DFC59F2F07AA90009CD837 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		21DFC6142F07D164009CD837 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +229,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		21DFC6122F07D164009CD837 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		21DFC6292F07D166009CD837 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 21DFC6152F07D164009CD837 /* WasurenaiWidgetExtension */;
+			targetProxy = 21DFC6282F07D166009CD837 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		21DFC5B22F07AA91009CD837 /* Debug */ = {
@@ -302,6 +424,60 @@
 			};
 			name = Release;
 		};
+		21DFC62D2F07D166009CD837 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 76D94XSD47;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WasurenaiWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WasurenaiWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oushin.Wasurenai.WasurenaiWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		21DFC62E2F07D166009CD837 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 76D94XSD47;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WasurenaiWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WasurenaiWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oushin.Wasurenai.WasurenaiWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -319,6 +495,15 @@
 			buildConfigurations = (
 				21DFC5B52F07AA91009CD837 /* Debug */,
 				21DFC5B62F07AA91009CD837 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		21DFC62C2F07D166009CD837 /* Build configuration list for PBXNativeTarget "WasurenaiWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21DFC62D2F07D166009CD837 /* Debug */,
+				21DFC62E2F07D166009CD837 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

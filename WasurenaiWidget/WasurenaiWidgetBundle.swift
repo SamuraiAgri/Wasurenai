@@ -12,5 +12,6 @@ import SwiftUI
 struct WasurenaiWidgetBundle: WidgetBundle {
     var body: some Widget {
         WasurenaiWidget()
+        WasurenaiWidgetControl()
     }
 }
