@@ -9,11 +9,16 @@ import SwiftUI
 
 @main
 struct WasurenaiApp: App {
+    
+    // MARK: - Properties
+    
     let persistenceController = PersistenceController.shared
+    
+    // MARK: - Body
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

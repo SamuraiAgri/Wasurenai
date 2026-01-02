@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- ダークモード用背景 -->
+  <rect width="1024" height="1024" rx="224" fill="#1C1C1E"/>
+  
+  <!-- カレンダーアイコン（背景） -->
+  <rect x="232" y="280" width="560" height="520" rx="60" fill="#2C2C2E"/>
+  
+  <!-- カレンダーヘッダー -->
+  <rect x="232" y="280" width="560" height="120" rx="60" fill="#3A3A3C"/>
+  <rect x="232" y="340" width="560" height="60" fill="#3A3A3C"/>
+  
+  <!-- カレンダーリング -->
+  <rect x="340" y="240" width="40" height="100" rx="20" fill="#00A896"/>
+  <rect x="644" y="240" width="40" height="100" rx="20" fill="#00A896"/>
+  
+  <!-- チェックマーク -->
+  <circle cx="512" cy="560" r="160" fill="#00A896" opacity="0.2"/>
+  <path d="M400 560 L480 640 L640 480" stroke="#00A896" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- ドット（期日インジケーター） -->
+  <circle cx="380" cy="720" r="24" fill="#EF476F"/>
+  <circle cx="460" cy="720" r="24" fill="#FFD166"/>
+  <circle cx="540" cy="720" r="24" fill="#00A896"/>
+</svg>
