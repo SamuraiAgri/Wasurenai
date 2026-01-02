@@ -17,7 +17,7 @@ struct AppStrings {
     
     // MARK: - Tab
     
-    static let tabHome = "ホーム"
+    static let tabHome = "チェック"
     static let tabCalendar = "カレンダー"
     static let tabItems = "アイテム"
     static let tabSettings = "設定"

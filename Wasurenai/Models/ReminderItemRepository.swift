@@ -93,7 +93,8 @@ final class ReminderItemRepository: ObservableObject {
         dueDate: Date,
         iconName: String?,
         memo: String?,
-        notifyBefore: Int16
+        notifyBefore: Int16,
+        priority: Priority = .medium
     ) -> ReminderItem {
         let item = ReminderItem(context: viewContext)
         item.id = UUID()
@@ -104,6 +105,7 @@ final class ReminderItemRepository: ObservableObject {
         item.iconName = iconName
         item.memo = memo
         item.notifyBefore = notifyBefore
+        item.priority = priority.rawValue
         item.isCompleted = false
         item.createdAt = Date()
         
@@ -122,7 +124,8 @@ final class ReminderItemRepository: ObservableObject {
         dueDate: Date,
         iconName: String?,
         memo: String?,
-        notifyBefore: Int16
+        notifyBefore: Int16,
+        priority: Priority
     ) {
         item.name = name
         item.room = room
@@ -131,6 +134,7 @@ final class ReminderItemRepository: ObservableObject {
         item.iconName = iconName
         item.memo = memo
         item.notifyBefore = notifyBefore
+        item.priority = priority.rawValue
         
         save()
     }

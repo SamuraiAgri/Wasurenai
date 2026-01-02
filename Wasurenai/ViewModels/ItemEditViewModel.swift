@@ -23,6 +23,7 @@ final class ItemEditViewModel: ObservableObject {
     @Published var memo: String = ""
     @Published var notifyBefore: Int = Int(AppConstants.defaultNotifyBefore)
     @Published var notifyEnabled: Bool = true
+    @Published var priority: Priority = .medium
     
     @Published var rooms: [Room] = []
     @Published var isSaving: Bool = false
@@ -103,6 +104,7 @@ final class ItemEditViewModel: ObservableObject {
         memo = item.memo ?? ""
         notifyBefore = Int(item.notifyBefore)
         notifyEnabled = item.notifyBefore > 0
+        priority = Priority.from(item.priority)
     }
     
     private func loadPresetData(_ preset: PresetItem) {
@@ -146,7 +148,8 @@ final class ItemEditViewModel: ObservableObject {
                 dueDate: dueDate,
                 iconName: selectedIconName,
                 memo: trimmedMemo.isEmpty ? nil : trimmedMemo,
-                notifyBefore: actualNotifyBefore
+                notifyBefore: actualNotifyBefore,
+                priority: priority
             )
         } else {
             repository.create(
@@ -156,7 +159,8 @@ final class ItemEditViewModel: ObservableObject {
                 dueDate: dueDate,
                 iconName: selectedIconName,
                 memo: trimmedMemo.isEmpty ? nil : trimmedMemo,
-                notifyBefore: actualNotifyBefore
+                notifyBefore: actualNotifyBefore,
+                priority: priority
             )
         }
         

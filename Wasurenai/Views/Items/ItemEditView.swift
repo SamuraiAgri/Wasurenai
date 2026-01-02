@@ -117,6 +117,19 @@ struct ItemEditView: View {
                 }
             }
             .tint(AppColors.primary)
+            
+            // 優先度選択
+            Picker("優先度", selection: $viewModel.priority) {
+                ForEach(Priority.allCases) { priority in
+                    HStack {
+                        Image(systemName: priority.iconName)
+                            .foregroundColor(priority.color)
+                        Text(priority.displayName)
+                    }
+                    .tag(priority)
+                }
+            }
+            .tint(AppColors.primary)
         }
     }
     

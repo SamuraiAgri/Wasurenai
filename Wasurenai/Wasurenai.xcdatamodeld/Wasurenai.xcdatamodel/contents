@@ -18,6 +18,7 @@
         <attribute name="memo" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="notifyBefore" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
         <relationship name="completionHistories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CompletionHistory" inverseName="item" inverseEntity="CompletionHistory"/>
         <relationship name="room" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Room" inverseName="items" inverseEntity="Room"/>
     </entity>
